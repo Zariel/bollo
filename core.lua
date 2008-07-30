@@ -10,10 +10,12 @@ local GetPlayerBuffDispelType = GetPlayerBuffDispelType
 local GetPlayerBuffApplications = GetPlayerBuffApplications
 local DebuffTypeColor = DebuffTypeColor
 
-function bollo:CreateBackground(name)
+function bollo:CreateBackground(name, db)
+	db = db or self.db.profile[name]
+
 	local bg = CreateFrame("Frame", nil, UIParent)
-	bg:SetWidth(bollo.db.profile[name].width)
-	bg:SetHeight(bollo.db.profile[name].height)
+	bg:SetWidth(db.width)
+	bg:SetHeight(db.height)
 
 	bg:SetBackdrop({
 		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", tile = true, tileSize = 16,
@@ -34,12 +36,12 @@ function bollo:CreateBackground(name)
 
 	bg:SetScript("OnMouseUp", function(self, button)
 		local x, y, s = self:GetRight(), self:GetTop(), self:GetEffectiveScale()
-		bollo.db.profile[name].x, bollo.db.profile[name].y = x / s, y / s
+		db.x, db.y = x / s, y / s
 
 		return self:StopMovingOrSizing()
 	end)
 
-	local x, y, s = bollo.db.profile[name].x, bollo.db.profile[name].y, bg:GetEffectiveScale()
+	local x, y, s = db.x, db.y, bg:GetEffectiveScale()
 
 	bg:SetPoint("TOPRIGHT", UIParent, "BOTTOMRIGHT", x * s, y * s)
 
