@@ -62,9 +62,32 @@ function Totem:OnInitialize()
 		name = "Totems",
 		type = "group",
 		order = 1,
-		args = {},
+		args = {
+			enableDesc = {
+				name = "Enable or disable the module",
+				type = "description",
+				order = 1,
+			},
+			enable = {
+				name = "Enable",
+				type = "toggle",
+				get = function(info)
+					return self:IsEnabled()
+				end,
+				set = function(info, key)
+					if key then
+						self:Enable()
+					else
+						self:Disable()
+					end
+					self.db.profile.enabled = key
+				end,
+				order = 2,
+			},
+		},
 	}
 
+	bollo:AddOptions(self)
 	bollo.icons.totem = bollo:CreateBackground("totem", Totem.db.profile.totem)
 end
 
