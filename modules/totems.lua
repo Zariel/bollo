@@ -55,6 +55,7 @@ function Totem:OnInitialize()
 			}
 		}
 	}
+
 	self.db = bollo.db:RegisterNamespace("Totems", defaults)
 
 	self.options = {
@@ -64,42 +65,11 @@ function Totem:OnInitialize()
 		args = {},
 	}
 
+	bollo.icons.totem = bollo:CreateBackground("totem", Totem.db.profile.totem)
 end
 
 function Totem:OnEnable()
 	self:SetupIcons()
-
-	if not bollo.icons.totem.bg then
-		local bg = CreateFrame("Frame", nil, UIParent)
-		bg:SetWidth(Totem.db.profile.totem.width)
-		bg:SetHeight(Totem.db.profile.totem.height)
-
-		bg:SetBackdrop({
-			bgFile = "Interface\\ChatFrame\\ChatFrameBackground", tile = true, tileSize = 16,
-			insets = {left = 1, right = 1, top = 1, bottom = 1},
-		})
-
-		bg:SetBackdropColor(0, 0, 1, 0.3)
-		bg:Hide()
-
-		bg:SetMovable(true)
-		bg:EnableMouse(true)
-		bg:SetClampedToScreen(true)
-		bg:SetScript("OnMouseDown", function(self, button)
-			self:ClearAllPoints()
-			return self:StartMoving()
-		end)
-
-		bg:SetScript("OnMouseUp", function(self, button)
-			local x, y = self:GetLeft(), self:GetTop()
-			Totem.db.profile.totem.x, Totem.db.profile.totem.y = x, y
-			return self:StopMovingOrSizing()
-		end)
-
-		bg:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", Totem.db.profile.totem.x, Totem.db.profile.totem.y)
-
-		bollo.icons.totem.bg = bg
-	end
 
 	bollo:GetModule("Config"):AddChildOpts("totem", Totem.db.profile.totem, Totem)
 
@@ -109,13 +79,13 @@ function Totem:OnEnable()
 		end
 	end
 	self:RegisterEvent("PLAYER_TOTEM_UPDATE")
+	self:RegisterEvent("PLAYER_ENTERING_WORLD", "PLAYER_TOTEM_UPDATE")
 end
 
 function Totem:SetupIcons()
-	if bollo.icons.totem then
+	if bollo.icons.totem[1] then
 		return
 	else
-		bollo.icons.totem = setmetatable({}, {__tostring = function() return "totem" end})
 		icons = bollo.icons.totem
 	end
 
@@ -145,6 +115,7 @@ function Totem:SetupIcons()
 				GameTooltip:SetTotem(self:GetID())
 			end
 		end)
+
 		b:Hide()
 	end
 end
@@ -154,13 +125,14 @@ function Totem:PLAYER_TOTEM_UPDATE()
 	-- Madness
 	for i = 1, 4 do
 		_, name, startTime, duration, icon = GetTotemInfo(i)
+		local buff = icons[i]
 		if name ~= "" and duration > 0 then
-			local buff = icons[i]
 			buff.icon:SetTexture(icon)
 			buff:Show()
 		else
-			icons[i]:Hide()
+			buff:Hide()
 		end
+
 		bollo.events:Fire("PostSetBuff", icons[i], i, nil)
 	end
 
