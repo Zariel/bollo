@@ -10,14 +10,65 @@ local GetPlayerBuffDispelType = GetPlayerBuffDispelType
 local GetPlayerBuffApplications = GetPlayerBuffApplications
 local DebuffTypeColor = DebuffTypeColor
 
+function bollo:CreateBackground(name)
+	local bg = CreateFrame("Frame", nil, UIParent)
+	bg:SetWidth(bollo.db.profile[name].width)
+	bg:SetHeight(bollo.db.profile[name].height)
+
+	bg:SetBackdrop({
+		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", tile = true, tileSize = 16,
+		edgeFile = [[Interface\Tooltips\UI-Tooltip-Border]], edgeSize = 10,
+		insets = {left = 1, right = 1, top = 1, bottom = 1},
+	})
+
+	bg:SetBackdropColor(0, 1, 0, 0.3)
+
+	bg:SetMovable(true)
+	bg:EnableMouse(true)
+	bg:SetClampedToScreen(true)
+
+	bg:SetScript("OnMouseDown", function(self, button)
+		self:ClearAllPoints()
+		return self:StartMoving()
+	end)
+
+	bg:SetScript("OnMouseUp", function(self, button)
+		local x, y, s = self:GetRight(), self:GetTop(), self:GetEffectiveScale()
+		bollo.db.profile[name].x, bollo.db.profile[name].y = x / s, y / s
+
+		return self:StopMovingOrSizing()
+	end)
+
+	local x, y, s = bollo.db.profile[name].x, bollo.db.profile[name].y, bg:GetEffectiveScale()
+
+	bg:SetPoint("TOPRIGHT", UIParent, "BOTTOMRIGHT", x * s, y * s)
+
+	local f = bg:CreateFontString(nil, "OVERLAY")
+	f:SetFont(STANDARD_TEXT_FONT, 14)
+	f:SetShadowColor(0, 0, 0, 1)
+	f:SetShadowOffset(1, -1)
+	f:SetAllPoints(bg)
+	f:SetFormattedText("%s - Anchor", name)
+
+	bg:Hide()
+
+	return setmetatable({
+		bg = bg
+	}, {
+		__tostring = function()
+			return name
+		end
+	})
+end
+
 function bollo:OnInitialize()
 	local defaults = {
 		profile = {
 			buff = {
 				["growthx"] = "LEFT",
 				["growthy"] = "DOWN",
-				["size"] = 20,
-				["spacing"] = 2,
+				["size"] = 32,
+				["spacing"] = 6,
 				["lock"] = false,
 				["x"] = 0,
 				["y"] = 0,
@@ -28,8 +79,8 @@ function bollo:OnInitialize()
 			debuff = {
 				["growthx"] = "LEFT",
 				["growthy"] = "DOWN",
-				["size"] = 20,
-				["spacing"] = 2,
+				["size"] = 32,
+				["spacing"] = 6,
 				["lock"] = false,
 				["x"] = 0,
 				["y"] = 0,
@@ -39,6 +90,7 @@ function bollo:OnInitialize()
 			}
 		},
 	}
+
 	self.db = LibStub("AceDB-3.0"):New("BolloDB", defaults)
 	self.events = LibStub("CallbackHandler-1.0"):New(bollo)
 
@@ -77,9 +129,6 @@ end
 function bollo:OnEnable()
 	self.frame = self.frame or CreateFrame("Frame")       -- Frame for modules to run OnUpdate
 
-	self.icons.buff = setmetatable({}, {__tostring = function() return "buff" end})
-	self.icons.debuff =setmetatable({}, {__tostring = function() return "debuff" end})
-
 	local bf = _G["BuffFrame"]
 	bf:UnregisterAllEvents()
 	bf:Hide()
@@ -87,59 +136,8 @@ function bollo:OnEnable()
 	bf:SetScript("OnEvent", nil)
 	_G.BuffButton_OnUpdate = nil
 
-	local bbg = CreateFrame("Frame")
-	bbg:SetWidth(bollo.db.profile.buff.width)
-	bbg:SetHeight(bollo.db.profile.buff.height)
-	bbg:SetBackdrop({
-		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", tile = true, tileSize = 16,
-		insets = {left = 1, right = 1, top = 1, bottom = 1},
-	})
-	bbg:SetBackdropColor(0, 1, 0, 0.3)
-	bbg:Hide()
-
-	bbg:SetMovable(true)
-	bbg:EnableMouse(true)
-	bbg:SetClampedToScreen(true)
-	bbg:SetScript("OnMouseDown", function(self, button)
-		self:ClearAllPoints()
-		return self:StartMoving()
-	end)
-	bbg:SetScript("OnMouseUp", function(self, button)
-		local x, y = self:GetLeft(), self:GetTop()
-		bollo.db.profile.buff.x, bollo.db.profile.buff.y = x, y
-		return self:StopMovingOrSizing()
-	end)
-
-	bbg:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", bollo.db.profile.buff.x, bollo.db.profile.buff.y)
-
-	self.icons.buff.bg = bbg
-
-	local dbg = CreateFrame("Frame")
-	dbg:SetWidth(bollo.db.profile.debuff.width)
-	dbg:SetHeight(bollo.db.profile.debuff.height)
-	dbg:SetBackdrop({
-		bgFile = "Interface\\ChatFrame\\ChatFrameBackground", tile = true, tileSize = 16,
-		insets = {left = 1, right = 1, top = 1, bottom = 1},
-	})
-	dbg:SetBackdropColor(1, 0, 0, 0.3)
-	dbg:Hide()
-
-	dbg:SetMovable(true)
-	dbg:EnableMouse(true)
-	dbg:SetClampedToScreen(true)
-	dbg:SetScript("OnMouseDown", function(self, button)
-		self:ClearAllPoints()
-		return self:StartMoving()
-	end)
-	dbg:SetScript("OnMouseUp", function(self, button)
-		local x, y = self:GetLeft(), self:GetTop()
-		bollo.db.profile.debuff.x, bollo.db.profile.debuff.y = x, y
-		return self:StopMovingOrSizing()
-	end)
-
-	dbg:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", bollo.db.profile.debuff.x, bollo.db.profile.debuff.y)
-
-	self.icons.debuff.bg = dbg
+	self.icons.buff = self:CreateBackground("buff")
+	self.icons.debuff = self:CreateBackground("debuff")
 
 	self:RegisterEvent("PLAYER_AURAS_CHANGED")
 	self:PLAYER_AURAS_CHANGED()
