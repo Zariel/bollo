@@ -106,6 +106,14 @@ function Totem:OnEnable()
 	self:PLAYER_TOTEM_UPDATE()
 end
 
+function Totem:OnDisable()
+	for k, v in ipairs(bollo.icons.totem) do
+		v:Hide()
+	end
+
+	self:UnregisterAllEvents()
+end
+
 function Totem:SetupIcons()
 	if bollo.icons.totem[1] then
 		return
