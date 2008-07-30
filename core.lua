@@ -35,15 +35,15 @@ function bollo:CreateBackground(name, db)
 	end)
 
 	bg:SetScript("OnMouseUp", function(self, button)
-		local x, y, s = self:GetRight(), self:GetTop(), self:GetEffectiveScale()
-		db.x, db.y = x / s, y / s
+		local x, y, s = self:GetLeft(), self:GetTop(), self:GetEffectiveScale()
+		db.x, db.y = x * s, y * s
 
 		return self:StopMovingOrSizing()
 	end)
 
 	local x, y, s = db.x, db.y, bg:GetEffectiveScale()
 
-	bg:SetPoint("TOPRIGHT", UIParent, "BOTTOMRIGHT", x * s, y * s)
+	bg:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", x / s, y / s)
 
 	local f = bg:CreateFontString(nil, "OVERLAY")
 	f:SetFont(STANDARD_TEXT_FONT, 14)
