@@ -80,6 +80,7 @@ function Totem:OnEnable()
 	end
 	self:RegisterEvent("PLAYER_TOTEM_UPDATE")
 	self:RegisterEvent("PLAYER_ENTERING_WORLD", "PLAYER_TOTEM_UPDATE")
+	self:PLAYER_TOTEM_UPDATE()
 end
 
 function Totem:SetupIcons()
