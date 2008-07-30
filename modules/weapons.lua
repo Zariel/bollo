@@ -8,7 +8,7 @@ function Weapon:OnInitialize()
 			weapon = {
 				["growthx"] = "LEFT",
 				["growthy"] = "DOWN",
-				["size"] = 30,
+				["size"] = 32,
 				["spacing"] = 2,
 				["lock"] = false,
 				["x"] = 0,
@@ -21,7 +21,7 @@ function Weapon:OnInitialize()
 					["Description"] = "Shows truncated names of buffs",
 					["font"] = STANDARD_TEXT_FONT,
 					["fontStyle"] = "OUTLINE",
-					["fontSize"] = 9,
+					["fontSize"] = 14,
 					["x"] = 0,
 					["y"] = 0,
 					["point"] = "BOTTOM",
@@ -37,7 +37,7 @@ function Weapon:OnInitialize()
 					["Description"] = "Show buff durations",
 					["point"] = "TOP",
 					["font"] = STANDARD_TEXT_FONT,
-					["fontSize"] = 9,
+					["fontSize"] = 14,
 					["fontStyle"] = "OUTLINE",
 					["x"] = 0,
 					["y"] = 0,
@@ -55,7 +55,7 @@ function Weapon:OnInitialize()
 
 	self.db = bollo.db:RegisterNamespace("Bollo-Weapon", defaults)
 
-	bollo.icons.weapon = bollo.icons.weapon or setmetatable({}, {__tostring = function() return "weapon" end})
+	bollo.icons.weapon = bollo:CreateBackground("weapon", Weapon.db.profile.weapon)
 
 	self.options = {
 		name = "Weapons",
@@ -135,35 +135,6 @@ function Weapon:OnEnable()
 		end
 	end
 
-	if not bollo.icons.weapon.bg then
-		local bg = CreateFrame("Frame", nil, UIParent)
-		bg:SetWidth(Weapon.db.profile.weapon.width)
-		bg:SetHeight(Weapon.db.profile.weapon.height)
-		bg:SetBackdrop({
-			bgFile = "Interface\\ChatFrame\\ChatFrameBackground", tile = true, tileSize = 16,
-			insets = {left = 1, right = 1, top = 1, bottom = 1},
-		})
-		bg:SetBackdropColor(0, 0, 1, 0.3)
-		bg:Hide()
-
-		bg:SetMovable(true)
-		bg:EnableMouse(true)
-		bg:SetClampedToScreen(true)
-		bg:SetScript("OnMouseDown", function(self, button)
-			self:ClearAllPoints()
-			return self:StartMoving()
-		end)
-
-		bg:SetScript("OnMouseUp", function(self, button)
-			local x, y = self:GetLeft(), self:GetTop()
-			Weapon.db.profile.weapon.x, Weapon.db.profile.weapon.y = x, y
-			return self:StopMovingOrSizing()
-		end)
-
-		bg:SetPoint("TOPLEFT", UIParent, "BOTTOMLEFT", Weapon.db.profile.weapon.x, Weapon.db.profile.weapon.y)
-		bollo.icons.weapon.bg = bg
-	end
-
 	bollo.RegisterCallback(self, "OnUpdate")
 
 	local conf = bollo:GetModule("Config")
@@ -186,9 +157,6 @@ function Weapon:OnDisable()
 			v:Hide()
 		end
 	end
-
-	--TemporaryEnchantFrame:Show()
-	--TemporaryEnchantFrame:SetScript("OnUpdate", BuffFrame_Enchant_OnUpdate)
 end
 
 local hasMainHandEnchant, mainHandExpiration, mainHandCharges, hasOffHandEnchant, offHandExpiration, offHandCharges
@@ -248,9 +216,9 @@ function Weapon:UpdateConfig()
 		v.icon:SetAllPoints(v)
 	end
 
-	local bf = bollo:GetModule("ButtonFacade")
+	local bf = bollo:GetModule("ButtonFacade", true)
 	if bf then
-		bf:OnEnable()
+		bf:UpdateSkins()
 	end
 
 	self:OnUpdate()
