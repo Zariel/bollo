@@ -61,11 +61,7 @@ end
 function Sort:OnInitialize()
 	local defaults = {
 		profile = {
-			buff = {
-				method = "TimeLeft",
-				reversed = false,
-			},
-			debuff = {
+			["*"] = {
 				method = "TimeLeft",
 				reversed = false,
 			},

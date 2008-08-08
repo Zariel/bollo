@@ -53,7 +53,7 @@ function Weapon:OnInitialize()
 		}
 	}
 
-	self.db = bollo.db:RegisterNamespace("Bollo-Weapon", defaults)
+	self.db = bollo.db:RegisterNamespace("Weapon", defaults)
 
 	bollo.icons.weapon = bollo:CreateBackground("weapon", Weapon.db.profile.weapon)
 

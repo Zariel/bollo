@@ -220,25 +220,8 @@ function duration:OnInitialize()
 	local defaults = {
 		profile = {
 			enabled = true,
-			buff = {
+			["*"] = {
 				["Description"] = "Show buff durations",
-				["point"] = "TOP",
-				["font"] = STANDARD_TEXT_FONT,
-				["fontSize"] = 9,
-				["fontStyle"] = "OUTLINE",
-				["x"] = 0,
-				["y"] = 0,
-				["format"] = "M:SS",
-				["color"] = {
-					r = 1,
-					g = 1,
-					b = 1,
-					a = 1,
-				},
-				enabled = true,
-			},
-			debuff = {
-				["Description"] = "Show debuff durations",
 				["point"] = "TOP",
 				["font"] = STANDARD_TEXT_FONT,
 				["fontSize"] = 9,
@@ -257,7 +240,7 @@ function duration:OnInitialize()
 		}
 	}
 
-	self.db =  bollo.db:RegisterNamespace("Bollo-Duration", defaults)
+	self.db =  bollo.db:RegisterNamespace("Duration", defaults)
 
 	self.count = 2
 

@@ -212,23 +212,7 @@ end
 function name:OnInitialize()
 	local defaults = {
 		profile = {
-			buff = {
-				["Description"] = "Shows truncated names of buffs",
-				["font"] = STANDARD_TEXT_FONT,
-				["fontStyle"] = "OUTLINE",
-				["fontSize"] = 9,
-				["x"] = 0,
-				["y"] = 0,
-				["point"] = "BOTTOM",
-				["color"] = {
-					r = 1,
-					g = 1,
-					b = 1,
-					a = 1,
-				},
-				["enabled"] = true,
-			},
-			debuff = {
+			["*"] = {
 				["Description"] = "Shows truncated names of buffs",
 				["font"] = STANDARD_TEXT_FONT,
 				["fontStyle"] = "OUTLINE",

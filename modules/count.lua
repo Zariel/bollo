@@ -239,23 +239,7 @@ function Count:OnInitialize()
 	local defaults = {
 		profile = {
 			enabled = true,
-			buff = {
-				["Description"] = "Shows count of buffs/debuffs",
-				["font"] = STANDARD_TEXT_FONT,
-				["fontStyle"] = "OUTLINE",
-				["fontSize"] = 9,
-				["x"] = 0,
-				["y"] = 0,
-				["point"] = "CENTER",
-				["color"] = {
-					r = 1,
-					g = 1,
-					b = 1,
-					a = 1,
-				},
-				enabled = true,
-			},
-			debuff = {
+			["*"] = {
 				["Description"] = "Shows count of buffs/debuffs",
 				["font"] = STANDARD_TEXT_FONT,
 				["fontStyle"] = "OUTLINE",
@@ -274,7 +258,7 @@ function Count:OnInitialize()
 		}
 	}
 
-	self.db = bollo.db:RegisterNamespace("Bollo-Count", defaults)
+	self.db = bollo.db:RegisterNamespace("Count", defaults)
 
 	self.count = 2
 
