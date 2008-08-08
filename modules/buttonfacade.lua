@@ -3,6 +3,18 @@ local bf = bollo:NewModule("ButtonFacade", "AceConsole-3.0")
 local lib
 local SetVertexColor
 
+local layers = {
+	"Backdrop",
+	"Flash",
+	"Border",
+	"Normal",
+	"Pushed",
+	"Disabled",
+	"Checked",
+	"Highlight",
+	"Gloss",
+}
+
 function bf:PostCreateIcon(event, parent, button)
 	button.border._SetVertexColor = button.border.SetVertexColor
 
@@ -13,11 +25,13 @@ function bf:PostCreateIcon(event, parent, button)
 		["Count"] = button.count,
 	}
 
-	lib:Group("Bollo", button.name):AddButton(button, data)
+	local G = lib:Group("Bollo", button.name)
+
+	G:AddButton(button, data)
 
 	if self.db.profile[button.name] then
 		local db = self.db.profile[button.name]
-		lib:Group("Bollo", button.name):Skin(db.Skin, db.Gloss, db.Backdrop)
+		G:Skin(unpack(db))
 	end
 end
 
@@ -25,7 +39,7 @@ function bf:PostSetBuff(event, button)
 	if button.name == "debuff" then
 		local index = button:GetID()
 		local col = DebuffTypeColor[GetPlayerBuffDispelType(index) or "none"]
-		button.border:_SetVertexColor(col.r, col.g, col.b)
+		button:SetLayerColor("Border", col.r, col.g, col.b)
 	end
 end
 
@@ -75,12 +89,12 @@ end
 
 function bf:UpdateSkin(SkinID, Gloss, Backdrop, Group, Button, Colors)
 	if Group then
-		self.db.profile[Group] = {
-			["Skin"] = SkinID,
-			["Gloss"] = Gloss,
-			["Backdrop"] = Backdrop,
-			["Color"] = Colors,
-		}
+		self.db.profile[Group] = self.db.profile[Group] or {}
+		local db = self.db.profile[Group]
+		db[1] = SkinID
+		db[2] = Gloss
+		db[3] = Backdrop
+		db[4] = Colors
 	end
 end
 
