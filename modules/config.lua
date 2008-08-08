@@ -95,31 +95,18 @@ function conf:AddChildOpts(name, db, module)
 				max = 50,
 				step = 1,
 			},
-			heightDesc = {
+			perRow_desc = {
 				order = 7,
-				name = "Set the height of the buff display",
+				name = "Set the max icons per row",
 				type = "description",
 			},
-			height = {
+			perRow = {
+				type = "range",
+				name = "Per Row",
 				order = 8,
-				name = "Max Height",
-				type = "range",
-				min = 25,
-				max = 600,
-				step = 25,
-			},
-			widthDesc = {
-				order = 9,
-				name = "Set the width the buff display",
-				type = "description",
-			},
-			width = {
-				order = 10,
-				name = "Max Width",
-				type = "range",
-				min = 25,
-				max = 600,
-				step = 25,
+				step = 1,
+				min = 1,
+				max = 40,
 			},
 			growthxDesc = {
 				order = 11,
