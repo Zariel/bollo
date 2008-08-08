@@ -66,7 +66,7 @@ end
 function bollo:OnInitialize()
 	local defaults = {
 		profile = {
-			buff = {
+			["*"] = {
 				["growthx"] = "LEFT",
 				["growthy"] = "DOWN",
 				["size"] = 32,
@@ -77,18 +77,7 @@ function bollo:OnInitialize()
 				["height"] = 100,
 				["width"] = 350,
 				["rowSpace"] = 20,
-			},
-			debuff = {
-				["growthx"] = "LEFT",
-				["growthy"] = "DOWN",
-				["size"] = 32,
-				["spacing"] = 6,
-				["lock"] = false,
-				["x"] = 0,
-				["y"] = 0,
-				["height"] = 100,
-				["width"] = 350,
-				["rowSpace"] = 20,
+				["perRow"] = 20,
 			}
 		},
 	}
@@ -204,9 +193,9 @@ function bollo:SortBuffs(icons, max)
 	local growthx = self.db.profile[name]["growthx"] == "LEFT" and -1 or 1
 	local growthy = self.db.profile[name]["growthy"] == "DOWN" and -1 or 1
 	local size = self.db.profile[name].size
-	local perCol = math.floor(icons.bg:GetWidth() / size + 0.5)
-	local perRow = math.floor(icons.bg:GetHeight() / size + 0.5)
+	local perRow = self.db.profile[name].perRow
 	local rowSpace = self.db.profile[name].rowSpace
+	local spacing = self.db.profile[name].spacing
 	local rows = 0
 	local anchor = growthx > 0 and "LEFT" or "RIGHT"
 	local relative = growthy  > 0 and "BOTTOM" or "TOP"
@@ -215,12 +204,12 @@ function bollo:SortBuffs(icons, max)
 		if buff:IsShown() then
 			buff:ClearAllPoints()
 
-			if offset == perCol then
+			if offset == perRow then
 				rows = rows + 1
 				offset = 0
 			end
 
-			buff:SetPoint(point, icons.bg, point, (offset * (size + self.db.profile[name].spacing) * growthx), (rows * (size + rowSpace) * growthy))
+			buff:SetPoint(point, icons.bg, point, (offset * (size + spacing) * growthx), (rows * (size + rowSpace) * growthy))
 			self.events:Fire("UpdateIconPosition", i, buff, icons)
 			offset = offset + 1
 		end
