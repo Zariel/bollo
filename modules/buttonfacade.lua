@@ -39,7 +39,8 @@ function bf:PostSetBuff(event, button)
 	if button.name == "debuff" then
 		local index = button:GetID()
 		local col = DebuffTypeColor[GetPlayerBuffDispelType(index) or "none"]
-		button:SetLayerColor("Border", col.r, col.g, col.b)
+		local G = lib:Group("Bollo", button.name)
+		G:SetLayerColor("Border", col.r, col.g, col.b)
 	end
 end
 
