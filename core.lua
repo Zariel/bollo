@@ -145,20 +145,6 @@ function bollo:OnEnable()
 	self.db.RegisterCallback("", "OnProfileChanged", Update)
 end
 
-local SortFunc = function(a, b)
-	if not a then
-		a = 0
-	else
-		a = a:GetTimeLeft()
-	end
-	if not b then
-		b = 0
-	else
-		b = b:GetTimeLeft()
-	end
-	return a > b
-end
-
 function bollo:GetPoint(point)
 	local anchor, relative, mod
 	if point == "TOP" then
@@ -279,4 +265,9 @@ function bollo:UpdateSettings(table, db)
 	end
 
 	self.events:Fire("PostUpdateConfig", name)
+end
+
+function bollo:SetConfigMode(state)
+	if state then
+	end
 end
