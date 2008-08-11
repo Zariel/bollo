@@ -1,19 +1,6 @@
 local bollo = LibStub("AceAddon-3.0"):GetAddon("Bollo")
 local bf = bollo:NewModule("ButtonFacade", "AceConsole-3.0")
 local lib
-local SetVertexColor
-
-local layers = {
-	"Backdrop",
-	"Flash",
-	"Border",
-	"Normal",
-	"Pushed",
-	"Disabled",
-	"Checked",
-	"Highlight",
-	"Gloss",
-}
 
 function bf:PostCreateIcon(event, parent, button)
 	button.border._SetVertexColor = button.border.SetVertexColor
@@ -40,7 +27,7 @@ function bf:PostSetBuff(event, button)
 		local index = button:GetID()
 		local col = DebuffTypeColor[GetPlayerBuffDispelType(index) or "none"]
 		local G = lib:Group("Bollo", button.name)
-		G:SetLayerColor("Border", col.r, col.g, col.b)
+		G:SetLayerColor("Border", col.r, col.g, col.b, 1)
 	end
 end
 
