@@ -190,6 +190,17 @@ function conf:OnInitialize()
 	LibStub("AceConfigDialog-3.0"):AddToBlizOptions("Bollo", "Bollo", nil)
 
 	self:RegisterChatCommand("bollo", function() InterfaceOptionsFrame_OpenToFrame(LibStub("AceConfigDialog-3.0").BlizOptions["Bollo"].frame) end)
+
+	local ldb = LibStub("LibDataBroker-1.1", true)
+	if ldb then
+		ldb:NewDataObject("Bollo", {
+			type = "launcher",
+			icon = "Interface\\Icons\\Spell_Shadow_DeathCoil",
+			OnClick = function()
+				InterfaceOptionsFrame_OpenToFrame(LibStub("AceConfigDialog-3.0").BlizOptions["Bollo"].frame)
+			end,
+		})
+	end
 end
 
 function conf:OnEnable()
