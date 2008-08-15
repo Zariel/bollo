@@ -1,6 +1,8 @@
 local bollo = LibStub("AceAddon-3.0"):GetAddon("Bollo")
 local Weapon = bollo:NewModule("WeaponBuffs")
 
+local GetWeaponEnchantInfo = GetWeaponEnchantInfo
+
 function Weapon:OnInitialize()
 	local defaults = {
 		profile = {
@@ -87,7 +89,7 @@ function Weapon:OnInitialize()
 
 	bollo:AddOptions(self)
 
-	self:SetEnabledState(self.db.profile.enabled)
+	self:SetEnabledState(self.db.profile.enable)
 
 	TemporaryEnchantFrame:SetScript("OnUpdate", nil)
 	TemporaryEnchantFrame:Hide()
