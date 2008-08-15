@@ -268,6 +268,4 @@ function bollo:UpdateSettings(table, db)
 end
 
 function bollo:SetConfigMode(state)
-	if state then
-	end
 end
