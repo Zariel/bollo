@@ -1,5 +1,5 @@
 ## Title: Bollo
-## Version: 2.4.3-16Beta
+## Version: 2.4.3-19.2
 ## Interface: 20400
 ## OptionalDeps: Ace3, LibSharedMedia-3.0
 ## SavedVariables: BolloDB
