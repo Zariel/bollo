@@ -11,4 +11,5 @@
 	<Include file="lib\AceDBOptions-3.0\AceDBOptions-3.0.xml"/>
 	<Include file="lib\LibButtonFacade\lib.xml"/>
 	<Include file="lib\LibSharedMedia-3.0\lib.xml"/>
+	<Script file="lib\LibDataBroker-1.1\LibDataBroker-1.1.lua"/>
 </Ui>
